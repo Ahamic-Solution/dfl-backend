@@ -5,7 +5,7 @@ import { openApiSpec } from './openapi';
 const router = Router();
 
 const swaggerUiOptions = {
-    customSiteTitle: 'Careloss API Docs',
+    customSiteTitle: 'DLF Docs',
     swaggerOptions: {
         persistAuthorization: true,
         displayRequestDuration: true,

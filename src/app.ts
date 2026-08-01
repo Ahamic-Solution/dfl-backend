@@ -13,6 +13,7 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import { rateLimiters } from './app/middlewares/rateLimiter.middleware';
 import router from './app/routes';
+import { swaggerRoutes } from './app/docs/swagger.route';
 
 const app: Application = express();
 // VERY IMPORTANT (for proxy / nginx)
@@ -38,6 +39,7 @@ app.use(
     })
 );
 app.use('/uploads', express.static('uploads'));
+app.use('/api-docs', swaggerRoutes);
 // application routers ----------------
 
 app.use(rateLimiters.apiLimiter);

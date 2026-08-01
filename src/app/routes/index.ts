@@ -7,6 +7,7 @@ import { galleryRoutes } from '../modules/gallery/gallery.routes';
 import { legalInfoRoutes } from '../modules/legal_info/legal_info.routes';
 import { ManageRoutes } from '../modules/manage-web/manage.routes';
 import { metaRoutes } from '../modules/meta/meta.routes';
+import { serviceRoutes } from '../modules/service/service.routes';
 import { testimonialRoutes } from '../modules/testimonial/testimonial.routes';
 
 import { userRoutes } from '../modules/user/user.routes';
@@ -49,6 +50,10 @@ const moduleRoutes = [
     {
         path: '/testimonial',
         router: testimonialRoutes,
+    },
+    {
+        path: '/service',
+        router: serviceRoutes,
     },
     {
         path: '/contact',

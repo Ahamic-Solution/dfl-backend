@@ -35,7 +35,12 @@ async function main() {
         process.on('SIGTERM', () => {
             logger.info('SIGTERM signal received');
             if (myServer) {
-                myServer.close(() => logger.info('Server closed gracefully'));
+                myServer.close(() => {
+                    logger.info('Server closed gracefully');
+                    process.exit(0);
+                });
+            } else {
+                process.exit(0);
             }
         });
     } catch (error) {

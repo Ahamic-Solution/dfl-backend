@@ -87,6 +87,28 @@ const storage = new CloudinaryStorage({
     },
 });
 
+// Patch the upload method to handle stream errors and prevent unhandled promise rejections
+(storage as any).upload = function (opts: any, file: any) {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(opts, (err, response) => {
+            if (err != null) return reject(err);
+            return resolve(response);
+        });
+
+        stream.on('error', (err) => {
+            reject(err);
+        });
+
+        if (file.stream) {
+            file.stream.on('error', (err: any) => {
+                reject(err);
+            });
+        }
+
+        file.stream.pipe(stream);
+    });
+};
+
 export const getUploadedFileUrl = (filePath: string): string => {
     return filePath;
 };

@@ -117,6 +117,9 @@ const blockContentSchema = new Schema<IBlockContent>(
 
 const blockSchema = new Schema<IServiceBlock>(
     {
+        _id: {
+            type: String,
+        },
         blockType: {
             type: String,
             required: true,

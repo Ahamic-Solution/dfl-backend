@@ -65,6 +65,7 @@ export interface IBlockContent {
 }
 
 export interface IServiceBlock {
+    _id?: string;
     blockType: ServiceBlockType;
     order?: number;
     layoutStyle?: ServiceLayoutStyle;

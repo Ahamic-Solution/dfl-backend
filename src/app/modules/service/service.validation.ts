@@ -48,6 +48,7 @@ const blockContentSchema = z.object({
 });
 
 const serviceBlockSchema = z.object({
+    _id: z.string().optional(),
     blockType: z.enum([
         SERVICE_BLOCK_TYPE.HeroSection,
         SERVICE_BLOCK_TYPE.RichTextJodit,
@@ -77,11 +78,11 @@ const serviceBlockSchema = z.object({
 });
 
 const seoSchema = z.object({
-    metaTitle: z.string().min(1).optional(),
-    metaDescription: z.string().min(1).optional(),
-    keywords: z.array(z.string().min(1)).optional(),
-    canonicalUrl: z.string().min(1).optional(),
-    ogImage: z.string().min(1).optional(),
+    metaTitle: z.string().optional(),
+    metaDescription: z.string().optional(),
+    keywords: z.array(z.string()).optional(),
+    canonicalUrl: z.string().optional(),
+    ogImage: z.string().optional(),
 });
 
 const createServiceValidationSchema = z.object({

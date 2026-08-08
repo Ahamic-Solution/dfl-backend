@@ -9,11 +9,11 @@ import crypto from 'crypto';
 import express, { Application } from 'express';
 import sendContactUsEmail from './app/helper/sendContactUsEmail';
 
+import { swaggerRoutes } from './app/docs/swagger.route';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
 import { rateLimiters } from './app/middlewares/rateLimiter.middleware';
 import router from './app/routes';
-import { swaggerRoutes } from './app/docs/swagger.route';
 
 const app: Application = express();
 // VERY IMPORTANT (for proxy / nginx)
@@ -27,7 +27,7 @@ app.use(
     cors({
         origin: [
             'http://localhost:3007',
-            'http://localhost:3008',
+            'http://localhost:5173',
             'http://localhost:3000',
             'http://localhost:3001',
             'http://10.10.20.48:3000',

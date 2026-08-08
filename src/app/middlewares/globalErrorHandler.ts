@@ -14,7 +14,7 @@ const globalErrorHandler: ErrorRequestHandler = (
 ) => {
     let statusCode = 500;
     // let message = 'Something went wrong';
-    let errorMessage = 'Something went wrong';
+    let errorMessage = err.message || 'Something went wrong';
     let errorDetails = {};
 
     if (err.code === 11000) {

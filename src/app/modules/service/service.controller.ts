@@ -4,6 +4,7 @@ import sendResponse from '../../utilities/sendResponse';
 import ServiceService from './service.service';
 
 const createService = catchAsync(async (req, res) => {
+    console.log("Payload",req.body)
     const result = await ServiceService.createService(req.body);
 
     sendResponse(res, {

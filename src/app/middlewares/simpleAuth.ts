@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import mongoose from 'mongoose';
 import config from '../config';
-import { Customer } from '../modules/customer/customer.model';
-import { Provider } from '../modules/provider/provider.model';
 import SuperAdmin from '../modules/superAdmin/superAdmin.model';
 import { USER_ROLE } from '../modules/user/user.constant';
 
@@ -38,23 +35,9 @@ const simpleAuth = async (req: Request, res: Response, next: NextFunction) => {
         let profileData: any;
         const { id, role } = decoded;
 
-        if (role === USER_ROLE.customer) {
-            profileData = await Customer.findOne({ user: id })
-                .select('_id user')
-                .populate({
-                    path: 'user',
-                    select: '_id isDeleted isBlocked isVerified',
-                });
-        } else if (role === USER_ROLE.provider) {
-            profileData = await Provider.findOne({
-                user: new mongoose.Types.ObjectId(id),
-            })
-                .select('_id user')
-                .populate({
-                    path: 'user',
-                    select: '_id isDeleted isBlocked isVerified',
-                });
-        } else if (role === USER_ROLE.superAdmin) {
+
+        
+         if (role === USER_ROLE.superAdmin) {
             profileData = await SuperAdmin.findOne({ user: id })
                 .select('_id user')
                 .populate({

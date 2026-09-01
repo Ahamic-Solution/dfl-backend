@@ -2,12 +2,7 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import AppError from '../../error/appError';
-import {
-    ENUM_NOTIFICATION_TYPE,
-    NOTIFICATION_ACTION,
-    NOTIFICATION_ENTITY,
-} from '../notification/notification.enum';
-import NotificationService from '../notification/notification.services';
+
 import { ENUM_SUPPORT_STATUS } from './support.enum';
 import { ISupport } from './support.interface';
 import { Support } from './support.model';
@@ -21,19 +16,6 @@ const createSupport = async (userData: JwtPayload, payload: ISupport) => {
 
     const result = await Support.create(supportData);
 
-    await NotificationService.sendNotification({
-        receiver: 'admin',
-        type: ENUM_NOTIFICATION_TYPE.SUPPORT_CREATED,
-        title: 'New Support Request',
-        message: 'A customer submitted a new support request.',
-        entity: NOTIFICATION_ENTITY.SUPPORT,
-        action: NOTIFICATION_ACTION.VIEW,
-        entityId: result._id,
-        meta: {
-            supportId: result._id,
-            contactReason: result.contactReason,
-        },
-    });
 
     return result;
 };

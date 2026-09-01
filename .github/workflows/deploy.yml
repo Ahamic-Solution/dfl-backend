@@ -1,0 +1,86 @@
+name: Deploy Backend to Hostinger VPS
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Project
+        run: npm run build
+
+      # Convert the ENV_VARS_JSON GitHub secret into a .env file on the runner
+      - name: Generate .env from ENV_VARS_JSON
+        env:
+          ENV_VARS_JSON: ${{ secrets.ENV_VARS_JSON }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const raw = process.env.ENV_VARS_JSON;
+            if (!raw) {
+              console.error("Error: ENV_VARS_JSON secret is not set or empty.");
+              process.exit(1);
+            }
+            try {
+              const data = JSON.parse(raw);
+              const lines = Object.entries(data).map(([k, v]) => `${k}=${typeof v === "object" ? JSON.stringify(v) : v}`);
+              fs.writeFileSync(".env", lines.join("\n") + "\n");
+              console.log("Successfully generated .env file from ENV_VARS_JSON");
+            } catch (err) {
+              console.error("Error: Invalid JSON format in ENV_VARS_JSON secret:", err.message);
+              process.exit(1);
+            }
+          '
+
+      # Configure SSH access to Hostinger VPS
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.HOSTINGER_SSH_PRIVATE_KEY || secrets.EC2_SSH_PRIVATE_KEY }}
+          HOSTINGER_HOST: ${{ secrets.HOSTINGER_HOST || secrets.EC2_HOST }}
+          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT || '22' }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p "$SSH_PORT" -H "$HOSTINGER_HOST" >> ~/.ssh/known_hosts
+
+      # Deploy the backend application to Hostinger VPS
+      - name: Deploy to Hostinger VPS
+        env:
+          HOSTINGER_HOST: ${{ secrets.HOSTINGER_HOST || secrets.EC2_HOST }}
+          HOSTINGER_USER: ${{ secrets.HOSTINGER_USER || secrets.EC2_USER }}
+          SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT || '22' }}
+        run: |
+          # 1. Create application directory if it does not exist
+          ssh -p $SSH_PORT $HOSTINGER_USER@$HOSTINGER_HOST "mkdir -p ~/applications/backend"
+
+          # 2. Sync project files (including dist/ and generated .env)
+          rsync -avz --delete \
+            -e "ssh -p $SSH_PORT" \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            . $HOSTINGER_USER@$HOSTINGER_HOST:~/applications/backend/
+
+          # 3. Install production dependencies on server and restart PM2
+          ssh -p $SSH_PORT $HOSTINGER_USER@$HOSTINGER_HOST "cd ~/applications/backend && \
+            npm ci --omit=dev && \
+            (command -v pm2 >/dev/null 2>&1 || npm install -g pm2) && \
+            (pm2 restart backend --update-env || pm2 start dist/server.js --name backend) && \
+            pm2 save"

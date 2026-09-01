@@ -21,11 +21,6 @@ export default {
     super_admin_password: process.env.SUPER_ADMIN_PASSWORD,
     google_api_key: process.env.GOOGLE_API_KEY,
 
-    twilio: {
-        accountSid: process.env.TWILIO_ACCOUNT_SID,
-        authToken: process.env.TWILIO_AUTH_TOKEN,
-        phoneNumber: process.env.TWILIO_PHONE_NUMBER,
-    },
     smtp: {
         smtp_host: process.env.SMTP_HOST,
         smtp_port: process.env.SMTP_PORT,
@@ -36,24 +31,5 @@ export default {
     },
     stripe: {
         stripe_secret_key: process.env.STRIPE_SECRET_KEY,
-        webhook_endpoint_secret: process.env.WEBHOOK_ENDPOINT_SECRET,
-        connected_account_webhook_secret:
-            process.env.CONNECTED_ACCOUNT_WEBHOOK_SECRET,
-        onboarding_return_url: process.env.ONBOARDING_RETURN_URL,
-        onboarding_refresh_url: process.env.ONBOARDING_REFRESH_URL,
-        subscription_payment_success_url:
-            process.env.STRIPE_SUBSCRIPTION_PURCHASE_SUCCESS_URL,
-        subscription_payment_cancel_url:
-            process.env.STRIPE_SUBSCRIPTION_PURCHASE_CANCEL_URL,
-        subscription_renew_success_url:
-            process.env.STRIPE_SUBSCRIPTION_RENEW_SUCCESS_URL,
-        subscription_renew_cancel_url:
-            process.env.STRIPE_SUBSCRIPTION_RENEW_CANCEL_URL,
-        collaboration_success_url: process.env.STRIPE_COLLABORATION_SUCCESS_URL,
-        collaboration_cancel_url: process.env.STRIPE_COLLABORATION_CANCEL_URL,
-    },
-    bcs: {
-        api_key: process.env.BCS_API_KEY,
-        base_url: process.env.BCS_BASE_URL,
     },
 };

@@ -4,7 +4,7 @@ import { getUploadedFileUrl } from '../../helper/fileUploader';
 import catchAsync from '../../utilities/catchasync';
 import sendResponse from '../../utilities/sendResponse';
 import SuperAdminServices from './superAdmin.services';
-
+// update user profile
 const updateUserProfile = catchAsync(async (req, res) => {
     const file: any = req.files?.profile_image;
     if (req.files?.profile_image) {

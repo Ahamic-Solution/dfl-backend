@@ -34,6 +34,9 @@ app.use(
             'http://localhost:9090',
             'http://10.10.20.43:9090',
             'https://kevo-dashboard-ashy.vercel.app',
+            'https://admin.dreamfloor.ae',
+            'https://www.dreamfloor.ae',
+            'https://dreamfloor.ae'
         ],
         credentials: true,
     })

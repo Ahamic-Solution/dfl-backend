@@ -6,6 +6,18 @@ import MetaController from './meta.controller';
 const router = express.Router();
 
 router.get(
+    '/category-chart',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+    MetaController.getCategoryChart
+);
+
+router.get(
+    '/inquiry-chart',
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+    MetaController.getInquiryChart
+);
+
+router.get(
     '/meta-data',
     auth(USER_ROLE.superAdmin, USER_ROLE.admin),
     MetaController.getDashboardMetaData
